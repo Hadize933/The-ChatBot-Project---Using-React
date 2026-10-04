@@ -1,0 +1,130 @@
+body{
+  font-family: Arial;
+  margin: 0px;
+}
+.send-button{
+  background-color: rgb(25, 135, 84);
+  padding: 12px 20px;
+  border:none;
+  margin-left: 10px;
+  border-radius: 8px;
+
+  font-size: 15px;
+  cursor: pointer;
+}
+.send-icon{
+  display: flex;
+  justify-content: center;
+}
+
+.chat-input{
+  flex-grow: 1;
+  padding: 11px 40px;
+  border-radius: 10px;
+  border-width: 1px;
+  border-color: rgb(228, 227, 227);
+  border-style: solid;
+  font-size: 15px;
+}
+.chat-input-container{
+  display: flex;
+  margin-bottom: 60px;
+}
+.app-container{
+  border-color: antiquewhite;
+  box-shadow: 1px -2px 3px 2px rgba(0, 0, 0, 0.05);
+  border-style: solid;
+  border-width: 1px;
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+
+  height: 100vh;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 12px;
+
+}
+.user-message{
+  display: flex;
+  justify-content: end;
+  align-items: start;
+}
+.spinner{
+  display: flex;
+  align-items: center;
+  width: 40px;
+  margin: -10px;
+}
+.robot-message{
+  display: flex;
+  align-items: start;
+}
+
+.message-text{
+  background-color: rgb(238, 238, 238);
+  padding: 15px 10px;
+  border-radius: 10px;
+  margin-right: 10px;
+  margin-left: 10px;
+  margin-bottom: 20px;
+  max-width: 300px;
+}
+.chat-message-profile{
+  width: 45px;
+  margin-right:5px ;
+  margin-left: 5px;
+}
+.chat-messages-container{
+  flex-grow: 1;
+  margin-top: 10px;
+  overflow: scroll;
+  scrollbar-width: none;
+}
+.wellcome-message{
+  color: rgb(123, 123, 123);
+  text-align: center;
+}
+
+.hello-message{
+  display: flex;
+  flex-direction: column;
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  margin-top: auto;
+}
+.wellcome-container{
+  display: flex;
+  margin-top: 100px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-section{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.header-name{
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  font-family: Franklin Gothic Medium;
+  margin-left: 20px;
+  color: #198754;
+}
+.git-option{
+  display: flex;
+  font-family: Helvetica;
+  color: white;
+  background-color: #198754;
+
+  margin-right: 15px;
+  padding: 6px 12px;
+
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}

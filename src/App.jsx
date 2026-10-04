@@ -1,0 +1,256 @@
+// @ts-nocheck
+import { useState, useRef, useEffect } from 'react'
+import {Chatbot} from 'supersimpledev'
+import './App.css'
+import './index.css'
+
+function HeaderSection(){
+        return(
+          <div className="header-section">
+            <span className="header-name">
+              <svg
+                className = "robot-svg"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="#198754"
+                width="50px"
+                viewBox="0 0 100 100"
+                enableBackground="new 0 0 100 100"
+                xmlSpace="preserve"
+              >
+                <path d="M49.6,25.8c7.2,0,13,5.8,13,13v3.3c-4.3-0.5-8.7-0.7-13-0.7c-4.3,0-8.7,0.2-13,0.7v-3.3 C36.6,31.7,42.4,25.8,49.6,25.8z"/>
+                
+                <path d="M73.2,63.8l1.3-11.4c2.9,0.5,5.1,2.9,5.1,5.6C79.6,61.2,76.7,63.8,73.2,63.8z"/>
+                
+                <path d="M25.9,63.8c-3.5,0-6.4-2.6-6.4-5.8c0-2.8,2.2-5.1,5.1-5.6L25.9,63.8z"/>
+                
+                <path d="M68.7,44.9c-6.6-0.7-12.9-1-19-1c-6.1,0-12.5,0.3-19,1h0c-2.2,0.2-3.8,2.2-3.5,4.3l2,19.4 c0.2,1.8,1.6,3.3,3.5,3.5c5.6,0.7,11.3,1,17.1,1s11.5-0.3,17.1-1c1.8-0.2,3.3-1.7,3.5-3.5l2-19.4v0 C72.4,47,70.9,45.1,68.7,44.9z M38.6,62.5c-1.6,0-2.8-1.6-2.8-3.7s1.3-3.7,2.8-3.7s2.8,1.6,2.8,3.7S40.2,62.5,38.6,62.5z M55.3,66.6c0,0.2-0.1,0.4-0.2,0.5 c-0.1,0.1-0.3,0.2-0.5,0.2h-9.9c-0.2,0-0.4-0.1-0.5-0.2c-0.1-0.1-0.2-0.3-0.2-0.5v-1.8c0-0.4,0.3-0.7,0.7-0.7h0.2 c0.4,0,0.7,0.3,0.7,0.7v0.9h8.1v-0.9c0-0.4,0.3-0.7,0.7-0.7h0.2c0.4,0,0.7,0.3,0.7,0.7V66.6z M60.6,62.5c-1.6,0-2.8-1.6-2.8-3.7 s1.3-3.7,2.8-3.7s2.8,1.6,2.8,3.7S62.2,62.5,60.6,62.5z"/>
+              </svg>
+              Chat-Bot
+            </span>
+            <button 
+              className="git-option"
+              onClick = {()=> window.open('https://github.com/Hadize933','_blank')}> 
+              See Git
+            </button>
+          </div>
+        )
+      }
+
+
+      function ChatInput({chatMessages, setChatMessages}){
+
+        const [inputText, setInputText] = useState('');
+        const [isLoading, setIsLoading] = useState(false)
+
+        /**
+         * @param {{ target: { value: import("react").SetStateAction<string>; }; }} event
+         */
+        function saveInputText(event){
+          setInputText(event.target.value);
+        }
+        
+        
+        async function sendMessage(){
+
+          if(isLoading || inputText === ''){
+            return;
+          }
+          setIsLoading(true);
+
+          setInputText('');
+          const newChatMessage = [
+            ...chatMessages,
+            {
+              message: inputText,
+              sender:'user',
+              id: crypto.randomUUID()
+            }
+          ];
+          
+          setChatMessages([
+            ...newChatMessage,
+            {
+              message: <img className="spinner" src="/images/loading-spinner.gif" alt="" />,
+              sender:'robot',
+              id: crypto.randomUUID()
+            }
+          ]);
+          
+          const response = await Chatbot.getResponseAsync(inputText);
+          
+          setChatMessages([
+            ...newChatMessage,
+            {
+              message: response,
+              sender:'robot',
+              id: crypto.randomUUID()
+            }
+          ])
+          setInputText('');
+          setIsLoading(false);
+        }
+
+
+        return (
+
+          <div className = "chat-input-container">
+            <input 
+              className = "chat-input"
+              type="text" 
+              placeholder="Send a message to chatbot"
+              onChange = {saveInputText}
+              value = {inputText}
+            />
+
+            <button 
+              onClick = {sendMessage}
+              className = "send-button">
+              <svg
+                className = "send-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#ffffff"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="22" y1="2" x2="11" y2="13" />
+                
+                <polygon points="22 2 15 22 11 13 2 9 22 2" />
+              </svg>
+            </button>
+          </div>
+        )
+      }
+
+
+      function MessageSender({message, sender}){
+        return(
+          <div className = {
+              sender === 'user'
+                ? 'user-message' 
+                : 'robot-message'
+            }>
+            
+            {sender === 'robot' && (
+                <img 
+                  src="/images/robot.png" 
+                  className = "chat-message-profile"
+                />
+              )}
+
+            <div className = "message-text">
+              {message}
+            </div>
+
+            <div>
+              {sender === 'user' && (
+                <img src="/images/user.png"  
+                className = "chat-message-profile"/>
+              )}
+            </div>
+          </div>
+        );
+      }
+
+      //Chat message component
+
+      /**
+ * @param {any[] | import("react").DependencyList | undefined} dependencies
+ */
+      function useAutoScroll(dependencies){
+        const containerRef = useRef(null);
+        useEffect(()=>{
+          const containerElem = containerRef.current;
+          if(containerElem){
+            containerElem.scrollTop = containerElem.scrollHeight;
+          }
+        }, dependencies);
+        return containerRef;
+      }
+      function ChatMessages({chatMessages}){
+        // const chatMessageRef = React.useRef('null')
+        // React.useEffect(()=>{
+        //   const chatMessageContainerElem = chatMessageRef.current;
+        //   chatMessageContainerElem.scrollTop = chatMessageContainerElem.scrollHeight;
+          
+        // }, [chatMessages])
+        const chatMessageRef = useAutoScroll([chatMessages]);
+        return(
+          <div 
+            className = "chat-messages-container"
+            ref = {chatMessageRef}>
+              <div className="wellcome-container">
+
+                <svg
+                className = "robot-svg"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="#000000"
+                width="100px"
+                viewBox="0 0 100 100"
+                enableBackground="new 0 0 100 100"
+                xmlSpace="preserve"
+              >
+                <path d="M49.6,25.8c7.2,0,13,5.8,13,13v3.3c-4.3-0.5-8.7-0.7-13-0.7c-4.3,0-8.7,0.2-13,0.7v-3.3 C36.6,31.7,42.4,25.8,49.6,25.8z"/>
+                
+                <path d="M73.2,63.8l1.3-11.4c2.9,0.5,5.1,2.9,5.1,5.6C79.6,61.2,76.7,63.8,73.2,63.8z"/>
+                
+                <path d="M25.9,63.8c-3.5,0-6.4-2.6-6.4-5.8c0-2.8,2.2-5.1,5.1-5.6L25.9,63.8z"/>
+                
+                <path d="M68.7,44.9c-6.6-0.7-12.9-1-19-1c-6.1,0-12.5,0.3-19,1h0c-2.2,0.2-3.8,2.2-3.5,4.3l2,19.4 c0.2,1.8,1.6,3.3,3.5,3.5c5.6,0.7,11.3,1,17.1,1s11.5-0.3,17.1-1c1.8-0.2,3.3-1.7,3.5-3.5l2-19.4v0 C72.4,47,70.9,45.1,68.7,44.9z M38.6,62.5c-1.6,0-2.8-1.6-2.8-3.7s1.3-3.7,2.8-3.7s2.8,1.6,2.8,3.7S40.2,62.5,38.6,62.5z M55.3,66.6c0,0.2-0.1,0.4-0.2,0.5 c-0.1,0.1-0.3,0.2-0.5,0.2h-9.9c-0.2,0-0.4-0.1-0.5-0.2c-0.1-0.1-0.2-0.3-0.2-0.5v-1.8c0-0.4,0.3-0.7,0.7-0.7h0.2 c0.4,0,0.7,0.3,0.7,0.7v0.9h8.1v-0.9c0-0.4,0.3-0.7,0.7-0.7h0.2c0.4,0,0.7,0.3,0.7,0.7V66.6z M60.6,62.5c-1.6,0-2.8-1.6-2.8-3.7 s1.3-3.7,2.8-3.7s2.8,1.6,2.8,3.7S62.2,62.5,60.6,62.5z"/>
+              </svg>
+                <p 
+                  className = "hello-message">
+                  Hello
+                </p>
+                <p className = "wellcome-message">
+                  Wellcome to Project Chat-bot
+                </p>
+              </div>
+              
+              {chatMessages.map((/** @type {{ message: unknown; sender: unknown; id: import("react").Key | null | undefined; }} */ chatMessages)=>{
+                  return(
+                    <MessageSender
+                      message={chatMessages.message}
+                      sender={chatMessages.sender}
+                      key = {chatMessages.id}
+                    />
+                  );
+                })
+              }
+          </div>
+        )
+      }
+
+      function App(){
+
+        const [chatMessages, setChatMessages] = useState([]);
+
+        // const chatMessages = msgArray[0];
+        // const setChatMessages = msgArray[1];
+        
+        //this line is the shortcut for the two lines of code above.
+        // const [chatMessages,setChatMessages] = msgArray;
+
+        // and the above line was shorted more by directly
+        //  destructuing the initial array above 
+
+        return (
+          <div className="app-container">
+
+            <HeaderSection/>
+            <ChatMessages
+            chatMessages={chatMessages} 
+            />
+            <ChatInput 
+            chatMessages = {chatMessages}
+            setChatMessages = {setChatMessages}
+            />
+            
+          </div>
+        );
+      }
+
+export default App
